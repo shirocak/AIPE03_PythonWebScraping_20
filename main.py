@@ -10,7 +10,6 @@ from selenium.common.exceptions import TimeoutException
 
 
 def setup_driver():
-    """建立並回傳已套用反偵測設定的 Chrome WebDriver"""
     options = Options()
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option("useAutomationExtension", False)
@@ -23,9 +22,7 @@ def setup_driver():
 
 
 def scrape_manga(url, output_dir="downloaded_manga"):
-    """開啟漫畫頁面，逐頁截圖並儲存至指定資料夾"""
 
-    # 建立儲存資料夾
     os.makedirs(output_dir, exist_ok=True)
     print(f"圖片將儲存至：{os.path.abspath(output_dir)}")
 
@@ -34,7 +31,6 @@ def scrape_manga(url, output_dir="downloaded_manga"):
     total_image_count = 0
 
     try:
-        # 開啟頁面，進入閱讀器
         driver.get(url)
         print("Page Title:", driver.title)
 
@@ -42,7 +38,6 @@ def scrape_manga(url, output_dir="downloaded_manga"):
         driver.switch_to.window(driver.window_handles[-1])
         driver.find_element(By.PARTIAL_LINK_TEXT, "すぐに読む").click()
 
-        # 逐頁截圖
         while True:
             for img in driver.find_elements(By.CSS_SELECTOR, "div.page_image img.image"):
                 if img.is_displayed():
@@ -61,7 +56,6 @@ def scrape_manga(url, output_dir="downloaded_manga"):
 
     finally:
         driver.quit()
-
 
 if __name__ == "__main__":
     scrape_manga("https://www.mangaz.com/book/detail/157901")
